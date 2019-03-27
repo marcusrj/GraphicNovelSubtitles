@@ -4,53 +4,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<?php include("head.php");?>
+  <title>Graphic Novel Subtitles</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
 <body>
 
-<?php include("top.php");?>
-<?php// include("nv.php");?>
+<div class="container">
+  <h1>Graphic Novel Subtitles</h1>
 
-<div class="container" id="main-content">
-	<h2> TEST </h2>
-	
+  <!--
+  <form action="upload.php" method="post" enctype="multipart/form-data">
+    <label for="file"><span>Select your video file:</span></label>
+    <label class="btn btn-default btn-file">
+         Browse <input type="file" name="file" id="file" style="display: none"/>
+    </label>
+		<input type="submit" name="submit" value="Go" />
+
+  </form>
+  <form action="upload.php" method="post" enctype="multipart/form-data">
+    <label for="file"><span>Select your video file:</span></label>
+    <label class="btn btn-default btn-file">
+         Browse <input type="file" name="file" id="file" style="display: none"/>
+    </label>
+		<input type="submit" name="submit" value="Go" />
+  </form>
+  -->
+
+  <form action="upload.php" method="post" enctype="multipart/form-data">
+    <div class="row">
+      <div class="col-lg-6 col-sm-6 col-6">
+        <h4>Select your video file</h4>
+        <div class="input-group">
+          <label class="input-group-btn">
+            <span class="btn btn-primary">
+              Browse&hellip; <input type="file" name ="file" id="file" style="display: none;" multiple>
+            </span>
+          </label>
+          <input type="text" class="form-control" readonly>
+      </div>
+      </div>
+      <div class="col-lg-6 col-sm-6 col-6">
+        <h4>Select your subtitle file</h4>
+        <div class="input-group">
+          <label class="input-group-btn">
+            <span class="btn btn-primary">
+              Browse&hellip; <input type="file" name ="file2" id="file2" style="display: none;" multiple>
+            </span>
+          </label>
+          <input type="text" class="form-control" readonly>
+        </div>
+      </div>
+    </div>
+  
+
+  <div class="col-lg-6 col-sm-6 col-6" style="margin-top:20px">
+  <button type="submit" name="submit" class="btn btn-primary btn-lg btn-block">Go</button>
+  </div>
+  </form>
+
+
+<script>
+$(function() {
+
+// We can attach the `fileselect` event to all file inputs on the page
+$(document).on('change', ':file', function() {
+  var input = $(this),
+      numFiles = input.get(0).files ? input.get(0).files.length : 1,
+      label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+  input.trigger('fileselect', [numFiles, label]);
+});
+
+// We can watch for our custom `fileselect` event like this
+$(document).ready( function() {
+    $(':file').on('fileselect', function(event, numFiles, label) {
+
+        var input = $(this).parents('.input-group').find(':text'),
+            log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+        if( input.length ) {
+            input.val(log);
+        } else {
+            if( log ) alert(log);
+        }
+
+    });
+});
+
+});
+
+</script>
+
 </div>
 
 
-
-<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-  <header class="masthead mb-auto">
-    <div class="inner">
-      <h3 class="masthead-brand">Cover</h3>
-      <nav class="nav nav-masthead justify-content-center">
-        <a class="nav-link active" href="#">Home</a>
-        <a class="nav-link" href="#">Features</a>
-        <a class="nav-link" href="#">Contact</a>
-      </nav>
-    </div>
-  </header>
-
-  <main role="main" class="inner cover">
-    <h1 class="cover-heading">Cover your page.</h1>
-    <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
-    <p class="lead">
-      <a href="#" class="btn btn-lg btn-secondary">Learn more</a>
-    </p>
-  </main>
-
-  <footer class="mastfoot mt-auto">
-    <div class="inner">
-      <p>Cover template for <a href="https://getbootstrap.com/">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
-    </div>
-  </footer>
-</div>
-
-<?php include("footer.php");?>
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
- 
 
 </body>
 </html>
