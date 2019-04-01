@@ -1,7 +1,8 @@
 {
     "require": {
         "php-ffmpeg/php-ffmpeg" : "0.*",
-        "php-ffmpeg/extras" : "*"
+        "php-ffmpeg/extras" : "*",
+        "benlipp/srt-parser": "^1.1"
     }
 
 }
