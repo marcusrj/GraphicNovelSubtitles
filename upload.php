@@ -9,19 +9,32 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" type="text/css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js"></script>
+
+
+
+
 </head>
+
+<div class="container-fluid">
+  <nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-primary mb-4">
+        <a class="navbar-brand" href="#">GNS</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+              <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                  <a class="nav-item nav-link" href="index.php">Home</a>
+                  <a class="nav-item nav-link" href="help.php">Help</a>
+                </div>
+              </div>
+      </nav>
+
+
+
+
 <body  style="background-color: black;">
 
 <div class="container">
-
-
-</div>
-
-
-</body>
-</html>
-
-
 
 
 <?php
@@ -31,105 +44,149 @@
     use \Benlipp\SrtParser\Parser;
     //use \FFMpeg\FFMpeg;
     //use vendor\Benlipp\SrtParser\;
+    
+    $vidname;
+    $subname;
+
 
     if(isset($_POST['submit'])){
-        $name       = $_FILES['file']['name'];
+
+        $vidname = $_FILES['file']['name'];
         $temp_name  = $_FILES['file']['tmp_name'];
-        if(isset($name)){
-            if(!empty($name)){
+        
+      
+        if(isset($vidname)){
+            if(!empty($vidname)){
                 $location = 'upload/';
-                if(move_uploaded_file($temp_name, $location.$name)){
+                if(move_uploaded_file($temp_name, $location.$vidname)){
                     echo 'File uploaded successfully';
                 }
             }
         }  else {
             echo 'You should select a file to upload !!';
         }
-        print_r($_FILES);
-        $name       = $_FILES['file2']['name'];
+        //print_r($_FILES);
+        $subname = $_FILES['file2']['name'];
         $temp_name  = $_FILES['file2']['tmp_name'];
-        if(isset($name)){
-            if(!empty($name)){
+        
+        if(isset($subname)){
+            if(!empty($subname)){
                 $location = 'upload/';
-                if(move_uploaded_file($temp_name, $location.$name)){
+                if(move_uploaded_file($temp_name, $location.$subname)){
                     echo 'File uploaded successfully';
                 }
             }
         }  else {
             echo 'You should select a file to upload !!';
         }
-        print_r($_FILES);
+        //print_r($_FILES);
 
 
     }
 
     $parser = new Parser();
 
-    $parser->loadFile('upload/blackadderTest.srt');
+    $parser->loadFile('upload/' . $subname);
 
     $captions = $parser->parse();   
 
- // foreach($captions as $caption){
-  //  echo "Start Time: " . $caption->startTime;
- //       echo "End Time: " . $caption->endTime;
- //       echo "Text: " . $caption->text;
- 
-  //}
-
-
-   // $cmd = time ffmpeg -ss 1800 -i Video.mp4 -vframes 1 -vcodec png -an -y %d.png
-
-    //shell_exec ( string $cmd ) : string
-
-
-
-
     $ffmpeg = FFMpeg\FFMpeg::create();
-    $video = $ffmpeg->open('BlackadderVidTest.mp4');
+    $video = $ffmpeg->open('upload/'. $vidname);
 
     $counter = 0;
     $imageName;
+    ?>
+
+
+
+
+    <h1 class="text-center mb-4 mt-5 pt-5" style="color: white;">Graphic Novel Subtitles</h1>
+
+    
+    <div class="row form-group">
+    <?php
     foreach($captions as $caption){
 
       //  echo "Start Time: " . $caption->startTime;
      //       echo "End Time: " . $caption->endTime;
        // echo "Text: " . $caption->text;
 
-     $frame = $video->frame(FFMpeg\Coordinate\TimeCode::fromSeconds($caption->startTime));
+     $frame = $video->frame(FFMpeg\Coordinate\TimeCode::fromSeconds($caption->startTime + 0.2));
      $imageName = "images/number" . $counter . ".jpg";
      $frame->save($imageName);
 
-    // echo "<img src=" $frame />
-     //echo '<img src="'. $imageName . '"/>';
-       // echo "<img src=images/number0.jpg" >
+     $numOfCols = 3;
+     $rowCount = 0;
+     $bootstrapColWidth = 12 / $numOfCols;
+     ?>
+    
+     
 
-
-       echo ' 
        
-       <div class="card bg-dark mb-3" style="width: 40rem;">
-       <img class="card-img-top" src="'. $imageName . '" alt="Card image cap">
-       <div class="card-body">
-         <p class="card-text">'. $caption->text . '</p>
-       </div>
-     </div>
-     </div> ';
+    <div class="col-md-<?php echo $bootstrapColWidth; ?> mt-100">
+            <div class="card bg-dark mb-4 pb-2 pt-2 pl-2 pr-2">
+               <!-- <img class="card-img-top img-fluid" src="<?php// echo $imageName ?>" alt="Card image cap">
+                <div class="card-body">
+                    <p class="card-text"><?php //echo $caption->text?></p>
+                </div>
+            </div>
+        </div> -->
+
+
+        <div class="card bg-dark text-white" style="margin-bottom: 50">
+            <img class="card-img" src="<?php echo $imageName ?>" alt="Card image">
+            <div class="card-img-overlay h-100 d-flex flex-column justify-content-end">
+                <!--<h5 class="card-title">Card title</h5>-->
+                <p class="card-text" style="text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;!important"><?php echo $caption->text?></p>
+               
+            </div>
+        </div>
+</div>
+    </div>
+    <?php
+
+
 
     
+    $rowCount++;
+    if($rowCount % $numOfCols == 0) echo '</div><div class="row">';
+    
+?>
+
+    
+
+<?php
+
      $counter = $counter + 1;
-        if($counter == 10)
+        if($counter == 200)
         {
             break;
         }
     }
 
-
-
-
-    //$frame = $video->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(42));
-    //$frame->save('image.jpg');
     if($ffmpeg){
     echo "test 4";
     }
 
 ?>
+
+<footer class="page-footer font-small blue">
+
+  
+  <p class="text-center mt-4" style="color:grey;">Created by Marcus Robertson-Jones<p>
+  
+  
+
+</footer>
+
+
+</div>
+</div>
+
+
+
+
+</body>
+</html>
+
 
