@@ -1,5 +1,9 @@
 # GraphicNovelSubtitles
 
+## What is this?
+
+Allows a user to upload a video file and a corresponding subtitle file and display it in a readable comic book like format
+
 ## Setup
 In order to run the site locally you will need 3 things
 - PHP
